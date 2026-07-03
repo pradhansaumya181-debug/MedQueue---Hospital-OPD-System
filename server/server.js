@@ -1,7 +1,8 @@
 // src/server.js
 // Entry point — server start karne wala file
 // app.js se Express app import karo, database connect karo, server start karo
-
+// server/server.js
+require('./src/server.js')
 require('dotenv').config();
 const app = require('./src/app');
 const connectDB = require('./src/config/db');
