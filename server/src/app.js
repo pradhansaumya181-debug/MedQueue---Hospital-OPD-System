@@ -9,14 +9,16 @@ const errorHandler = require('./middleware/errorHandler')
 
 const app = express()
 
-// ── CORS — SABSE PEHLE ──
+// ── CORS ──
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: false,
 }))
-app.options('*', cors())
+
+// Express 5 ke liye regex use karo — '*' nahi
+app.options(/.*/, cors())
 
 // Security
 app.use(helmet({ crossOriginResourcePolicy: false }))
