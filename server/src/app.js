@@ -24,19 +24,20 @@ const allowedOrigins = [
   "https://med-queue-hospital-opd-system-gur9.vercel.app",
 ];
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    credentials: true,
-  })
-);
+// server/server.js mein CORS section dhundo aur replace karo:
+
+app.use(cors({
+  origin: [
+    'http://localhost:5173',
+    'https://med-queue-hospital-opd-system.vercel.app',
+    'https://med-queue-hospital-opd-system-gur9.vercel.app',
+    'https://med-queue-hospital-opd-system-gur9-41x27m1oq.vercel.app',
+    process.env.FRONTEND_URL,
+  ].filter(Boolean),
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+}))
 
 // ========================================
 // RATE LIMITING
