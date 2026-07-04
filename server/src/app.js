@@ -1,111 +1,64 @@
-// src/app.js
+// server/src/app.js
+const express      = require('express')
+const cors         = require('cors')
+const helmet       = require('helmet')
+const morgan       = require('morgan')
+const rateLimit    = require('express-rate-limit')
+const routes       = require('./routes')
+const errorHandler = require('./middleware/errorHandler')
 
-require('dotenv').config();
+const app = express()
 
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const morgan = require('morgan');
-const rateLimit = require('express-rate-limit');
-
-const routes = require('./routes');
-const errorHandler = require('./middleware/errorHandler');
-
-const app = express();
-
-// ========================================
-// SECURITY MIDDLEWARE
-// ========================================
-
-app.use(helmet());
-
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://med-queue-hospital-opd-system.vercel.app",
-  "https://med-queue-hospital-opd-system-gur9.vercel.app", // agar preview domain bhi chahiye
-];
-
+// ── CORS — SABSE PEHLE ──
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true
-}));
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: false,
+}))
+app.options('*', cors())
 
+// Security
+app.use(helmet({ crossOriginResourcePolicy: false }))
 
-// ========================================
-// RATE LIMITING
-// ========================================
-
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
+// Rate limiting
+app.use(rateLimit({
+  windowMs: 15 * 60 * 1000,
   max: 100,
   standardHeaders: true,
   legacyHeaders: false,
-  message: {
-    success: false,
-    message: 'Too many requests. Please try again later.',
-  },
-});
+}))
 
-app.use(limiter);
+// Body parser
+app.use(express.json({ limit: '10mb' }))
+app.use(express.urlencoded({ extended: true }))
 
-app.options(/.*/, cors());
-
-// ========================================
-// BODY PARSER
-// ========================================
-
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true }));
-
-// ========================================
-// LOGGER
-// ========================================
-
+// Logger
 if (process.env.NODE_ENV !== 'test') {
-  app.use(morgan('dev'));
+  app.use(morgan('dev'))
 }
 
-// ========================================
-// HEALTH CHECK
-// ========================================
-
+// Health check
 app.get('/health', (req, res) => {
-  res.status(200).json({
+  res.json({
     success: true,
     message: 'MedQueue API is running',
     environment: process.env.NODE_ENV || 'development',
-    timestamp: new Date().toISOString(),
-  });
-});
+  })
+})
 
-// ========================================
-// API ROUTES
-// ========================================
+// Routes
+app.use('/api', routes)
 
-app.use('/api', routes);
-
-// ========================================
-// 404 HANDLER
-// ========================================
-// Express 5 compatible
-
+// 404
 app.use((req, res) => {
   res.status(404).json({
     success: false,
     message: `Route ${req.method} ${req.originalUrl} not found`,
-  });
-});
+  })
+})
 
-// ========================================
-// GLOBAL ERROR HANDLER
-// ========================================
+// Error handler
+app.use(errorHandler)
 
-app.use(errorHandler);
-
-module.exports = app;
+module.exports = app
