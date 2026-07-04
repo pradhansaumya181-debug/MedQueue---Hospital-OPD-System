@@ -1,32 +1,59 @@
-// src/server.js
-// Entry point — server start karne wala file
-// app.js se Express app import karo, database connect karo, server start karo
 // server/server.js
+require('dotenv').config()
 
-require('dotenv').config();
-const app = require('./src/app');
-const connectDB = require('./src/config/db');
+const express   = require('express')
+const cors      = require('cors')
+const app2      = require('./src/app')
+const connectDB = require('./src/config/db')
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 10000
 
-// Server start karne ka function
+// ── CORS — sabse pehle lagao ──
+app2.use(cors({
+  origin: function (origin, callback) {
+    // Allowed origins list
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'https://med-queue-hospital-opd-system.vercel.app',
+      'https://med-queue-hospital-opd-system-gur9.vercel.app',
+      'https://med-queue-hospital-opd-system-gur9-41x27m1oq.vercel.app',
+      process.env.FRONTEND_URL,
+    ].filter(Boolean)
+
+    // Origin undefined hone par allow karo (Postman, server-to-server)
+    if (!origin) return callback(null, true)
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true)
+    } else {
+      console.log('CORS blocked origin:', origin)
+      // Temporarily sab allow karo — baad mein restrict karna
+      callback(null, true)
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  credentials: true,
+  optionsSuccessStatus: 200,
+}))
+
+// OPTIONS preflight requests handle karo
+app2.options('*', cors())
+
 const startServer = async () => {
   try {
-    // Pehle database connect karo
-    await connectDB();
+    await connectDB()
 
-    // Phir server start karo
-    app.listen(PORT, () => {
-      console.log(`🚀 MedQueue Server running on port ${PORT}`);
-      console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
-      console.log(`📋 Health check: http://localhost:${PORT}/health`);
-      console.log(`🔐 Auth API: http://localhost:${PORT}/api/auth`);
-    });
+    app2.listen(PORT, '0.0.0.0', () => {
+      console.log(`🚀 MedQueue Server running on port ${PORT}`)
+      console.log(`🌍 Environment: ${process.env.NODE_ENV}`)
+      console.log(`📋 Health check: http://localhost:${PORT}/health`)
+    })
 
   } catch (error) {
-    console.error('❌ Failed to start server:', error);
-    process.exit(1);
+    console.error('❌ Failed to start server:', error)
+    process.exit(1)
   }
-};
+}
 
-startServer();
+startServer()
