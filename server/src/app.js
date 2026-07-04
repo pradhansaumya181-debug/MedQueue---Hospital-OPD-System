@@ -45,6 +45,8 @@ const limiter = rateLimit({
 
 app.use(limiter);
 
+app.options(/.*/, cors());
+
 // ========================================
 // BODY PARSER
 // ========================================
