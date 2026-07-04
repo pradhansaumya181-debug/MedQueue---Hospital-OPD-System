@@ -21,11 +21,20 @@ app.use(helmet());
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://med-queue-hospital-opd-system-gur9.vercel.app",
+  "https://med-queue-hospital-opd-system.vercel.app",
+  "https://med-queue-hospital-opd-system-gur9.vercel.app", // agar preview domain bhi chahiye
 ];
 
-// server/server.js mein CORS section dhundo aur replace karo:
-
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
+}));
 
 
 // ========================================
