@@ -14,7 +14,7 @@ import axios from 'axios'
 const api = axios.create({
   // Base URL — VITE_API_URL = "http://localhost:5000/api"
   // Toh api.get('/auth/me') = "http://localhost:5000/api/auth/me"
-  baseURL: import.meta.env.VITE_API_URL || 'https://medqueue-hospital-opd-system-8.onrender.com',
+  baseURL: import.meta.env.VITE_API_URL || 'https://medqueue-hospital-opd-system-8.onrender.com/api',
 
   // Har request ka timeout — 10 second baad automatically fail
   timeout: 10000,
