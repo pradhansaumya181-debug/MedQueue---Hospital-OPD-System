@@ -38,7 +38,7 @@ app.use(cors({
 }))
 
 // OPTIONS preflight requests handle karo
-app.options('*', cors())
+app.options(/.*/, cors())
 
 const startServer = async () => {
   try {
