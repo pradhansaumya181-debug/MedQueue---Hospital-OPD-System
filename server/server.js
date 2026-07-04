@@ -3,13 +3,13 @@ require('dotenv').config()
 
 const express   = require('express')
 const cors      = require('cors')
-const app2      = require('./src/app')
+const app      = require('./src/app')
 const connectDB = require('./src/config/db')
 
 const PORT = process.env.PORT || 10000
 
 // ── CORS — sabse pehle lagao ──
-app2.use(cors({
+app.use(cors({
   origin: function (origin, callback) {
     // Allowed origins list
     const allowedOrigins = [
@@ -38,13 +38,13 @@ app2.use(cors({
 }))
 
 // OPTIONS preflight requests handle karo
-app2.options('*', cors())
+app.options('*', cors())
 
 const startServer = async () => {
   try {
     await connectDB()
 
-    app2.listen(PORT, '0.0.0.0', () => {
+    app.listen(PORT, '0.0.0.0', () => {
       console.log(`🚀 MedQueue Server running on port ${PORT}`)
       console.log(`🌍 Environment: ${process.env.NODE_ENV}`)
       console.log(`📋 Health check: http://localhost:${PORT}/health`)
