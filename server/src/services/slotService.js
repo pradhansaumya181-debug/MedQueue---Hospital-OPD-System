@@ -104,7 +104,14 @@ const getAvailableSlots = async (doctorId, date) => {
   // Slots nahi hain to generate karo pehle
   let slots = doctor.slots.get(date);
   if (!slots || slots.length === 0) {
-    slots = await generateSlotsForDate(doctorId, date);
+    try {
+      slots = await generateSlotsForDate(doctorId, date);
+    } catch (error) {
+      if (error.message.includes('not available')) {
+        return [];
+      }
+      throw error;
+    }
   }
 
   // Sirf available slots filter karo
