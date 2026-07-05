@@ -86,9 +86,9 @@ console.log('Day Of Week:', dayOfWeek);
   doctor.slots.set(date, slots);
   doctor.markModified('slots');
   console.log('Generated slots:', slots.length);
-  await doctor.save();
+  const savedDoctor = await doctor.save();
 
-  return slots;
+  return savedDoctor.slots.get(date);
 };
 
 /**
