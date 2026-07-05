@@ -70,6 +70,7 @@ const BookAppointment = () => {
   const { bookingLoading, bookAppointment, selectedSlot, setSelectedSlot } = useAppointmentStore()
 
   const [paymentModal, setPaymentModal] = useState(false)
+  const [paymentMethod, setPaymentMethod] = useState('online') // 'online' | 'counter'
 
   const [doctor, setDoctor] = useState(null)
   const [doctorLoading, setDoctorLoading] = useState(true)
@@ -278,18 +279,89 @@ useEffect(() => {
               </div>
             </div>
 
+            {/* Payment Method selector */}
+            <div className="mq-card" style={{ padding: 20, marginBottom: 20 }}>
+              <h3 style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)', margin: '0 0 14px' }}>
+                Select Payment Method
+              </h3>
+              <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
+                <label style={{
+                  flex: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  padding: '12px',
+                  border: `1.5px solid ${paymentMethod === 'online' ? 'var(--brand-accent)' : 'var(--border)'}`,
+                  borderRadius: 'var(--radius-md)',
+                  background: paymentMethod === 'online' ? 'var(--brand-light)' : 'var(--surface)',
+                  cursor: 'pointer',
+                  fontSize: 13,
+                  fontWeight: 500,
+                  transition: 'all 0.15s',
+                }}>
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="online"
+                    checked={paymentMethod === 'online'}
+                    onChange={() => setPaymentMethod('online')}
+                    style={{ accentColor: 'var(--brand-accent)', cursor: 'pointer' }}
+                  />
+                  Pay Online (Razorpay)
+                </label>
+                
+                <label style={{
+                  flex: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  padding: '12px',
+                  border: `1.5px solid ${paymentMethod === 'counter' ? 'var(--brand-accent)' : 'var(--border)'}`,
+                  borderRadius: 'var(--radius-md)',
+                  background: paymentMethod === 'counter' ? 'var(--brand-light)' : 'var(--surface)',
+                  cursor: 'pointer',
+                  fontSize: 13,
+                  fontWeight: 500,
+                  transition: 'all 0.15s',
+                }}>
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="counter"
+                    checked={paymentMethod === 'counter'}
+                    onChange={() => setPaymentMethod('counter')}
+                    style={{ accentColor: 'var(--brand-accent)', cursor: 'pointer' }}
+                  />
+                  Pay Cash at Counter
+                </label>
+              </div>
+            </div>
+
             {/* Confirm button */}
             <button
-  className="mq-btn-primary"
-  onClick={() => setPaymentModal(true)}
-  disabled={!selectedSlot}
->
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-    <rect x="1" y="4" width="14" height="10" rx="2" stroke="white" strokeWidth="1.6"/>
-    <path d="M1 8h14" stroke="white" strokeWidth="1.6"/>
-  </svg>
-  Proceed to Payment — ₹{doctor?.consultationFee}
-</button>
+              className="mq-btn-primary"
+              onClick={paymentMethod === 'online' ? () => setPaymentModal(true) : handleBook}
+              disabled={!selectedSlot || bookingLoading}
+            >
+              {bookingLoading ? (
+                <div className="mq-spinner" style={{ width: 16, height: 16 }} />
+              ) : paymentMethod === 'online' ? (
+                <>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <rect x="1" y="4" width="14" height="10" rx="2" stroke="white" strokeWidth="1.6"/>
+                    <path d="M1 8h14" stroke="white" strokeWidth="1.6"/>
+                  </svg>
+                  Proceed to Payment — ₹{doctor?.consultationFee}
+                </>
+              ) : (
+                <>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M13 4l-7 7-3-3" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  Confirm & Book (Pay at Counter)
+                </>
+              )}
+            </button>
 
           </>
         )}
