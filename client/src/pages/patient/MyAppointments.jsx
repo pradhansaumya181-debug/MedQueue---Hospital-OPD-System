@@ -337,44 +337,40 @@ const MyAppointments = () => {
                           </>
                         )}
                       </button>
-                      //view reciept
-                      // Appointment card ke andar — cancel button ke saath
-
-
                     )}
+
+                    {/* View Receipt Button */}
+                    <button
+                      onClick={() => navigate(`/patient/appointments/${apt._id}`)}
+                      style={{
+                        padding: '7px 14px',
+                        borderRadius: 'var(--radius-md)',
+                        border: '1.5px solid var(--border)',
+                        background: 'none',
+                        color: 'var(--text-secondary)',
+                        fontSize: 12, fontWeight: 500,
+                        cursor: 'pointer',
+                        fontFamily: 'var(--font-sans)',
+                        transition: 'all 0.15s',
+                        flexShrink: 0,
+                      }}
+                      onMouseEnter={e => {
+                        e.currentTarget.style.borderColor = 'var(--brand-accent)'
+                        e.currentTarget.style.color = 'var(--brand-accent)'
+                      }}
+                      onMouseLeave={e => {
+                        e.currentTarget.style.borderColor = 'var(--border)'
+                        e.currentTarget.style.color = 'var(--text-secondary)'
+                      }}
+                    >
+                      View Receipt
+                    </button>
                   </div>
                 </div>
               )
             })}
           </div>
         )}
-
-        // Appointment card ke andar — cancel button ke saath
-<button
-  onClick={() => navigate(`/patient/appointments/${apt._id}`)}
-  style={{
-    padding: '7px 14px',
-    borderRadius: 'var(--radius-md)',
-    border: '1.5px solid var(--border)',
-    background: 'none',
-    color: 'var(--text-secondary)',
-    fontSize: 12, fontWeight: 500,
-    cursor: 'pointer',
-    fontFamily: 'var(--font-sans)',
-    transition: 'all 0.15s',
-    flexShrink: 0,
-  }}
-  onMouseEnter={e => {
-    e.currentTarget.style.borderColor = 'var(--brand-accent)'
-    e.currentTarget.style.color = 'var(--brand-accent)'
-  }}
-  onMouseLeave={e => {
-    e.currentTarget.style.borderColor = 'var(--border)'
-    e.currentTarget.style.color = 'var(--text-secondary)'
-  }}
->
-  View Receipt
-</button>
 
         {/* ── Confirm Cancel Modal ── */}
         <ConfirmModal
