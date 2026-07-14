@@ -227,8 +227,11 @@ const updateDoctorSelfProfile = async (req, res, next) => {
   try {
     const userId = req.user.id;
 
-    // Doctor ke allowed updates — fees aur hours adjust kar sakta hai
-    const allowedFields = ['consultationFee', 'workingHours', 'availableDays'];
+    // Doctor ke allowed updates — now includes professional info
+    const allowedFields = [
+      'consultationFee', 'workingHours', 'availableDays',
+      'specialization', 'qualification', 'experience', 'registrationNumber'
+    ];
     const doctorUpdates = {};
     allowedFields.forEach(f => {
       if (req.body[f] !== undefined) doctorUpdates[f] = req.body[f];

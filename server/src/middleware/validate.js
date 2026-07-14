@@ -154,11 +154,6 @@ const schemas = {
 
   createDoctorProfile: validate({
     userId: [(val) => rules.isObjectId(val, 'User ID')],
-    specialization: ['isRequired'],
-    qualification: ['isRequired'],
-    experience: [(val) => rules.isNumber(val, 'Experience', 0, 60)],
-    registrationNumber: ['isRequired'],
-    consultationFee: [(val) => rules.isNumber(val, 'Consultation fee', 0)],
   }),
 };
 

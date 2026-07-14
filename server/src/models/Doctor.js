@@ -45,35 +45,33 @@ const doctorSchema = new mongoose.Schema(
     // --- Professional Info ---
     specialization: {
       type: String,
-      required: [true, 'Specialization is required'],
       trim: true,
       // Example: "Cardiologist", "Dermatologist", "General Physician"
     },
 
     qualification: {
       type: String,
-      required: true,
       // Example: "MBBS, MD (Cardiology)"
     },
 
     experience: {
       type: Number,           // Years mein
-      required: true,
       min: [0, 'Experience cannot be negative'],
+      default: 0,
     },
 
     registrationNumber: {
       type: String,
-      required: true,
       unique: true,           // Medical council registration number unique hoti hai
+      sparse: true,
       trim: true,
     },
 
     // --- Consultation Details ---
     consultationFee: {
       type: Number,
-      required: true,
       min: [0, 'Fee cannot be negative'],
+      default: 0,
     },
 
     // Kis hospital/clinic mein practice karta hai

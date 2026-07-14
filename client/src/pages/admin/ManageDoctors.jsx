@@ -17,10 +17,7 @@ const ManageDoctors = () => {
   const [deleteLoading, setDeleteLoading] = useState(false)
 
   const [form, setForm] = useState({
-    userId: '', specialization: '', qualification: '',
-    experience: '', registrationNumber: '', consultationFee: '',
-    availableDays: [1,2,3,4,5],
-    workingHours: { start: '09:00', end: '17:00' },
+    userId: '',
   })
   const [doctorUsers, setDoctorUsers] = useState([])
   const [formLoading, setFormLoading] = useState(false)
@@ -45,16 +42,14 @@ const ManageDoctors = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!form.userId || !form.specialization || !form.consultationFee) {
-      toast.error('Please fill all required fields')
+    if (!form.userId) {
+      toast.error('Please select a doctor user')
       return
     }
     setFormLoading(true)
     try {
       await createDoctorProfile({
-        ...form,
-        experience: Number(form.experience),
-        consultationFee: Number(form.consultationFee),
+        userId: form.userId,
       })
       toast.success('Doctor profile created successfully!', 'Done')
       setShowForm(false)
@@ -112,10 +107,10 @@ const ManageDoctors = () => {
               Create Doctor Profile
             </h3>
             <form onSubmit={handleSubmit}>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
 
                 {/* Doctor user select */}
-                <div style={{ gridColumn: '1 / -1' }}>
+                <div>
                   <label className="mq-label">Select Doctor User *</label>
                   <select
                     className="mq-input"
@@ -129,44 +124,6 @@ const ManageDoctors = () => {
                       <option key={u._id} value={u._id}>{u.name} ({u.email})</option>
                     ))}
                   </select>
-                </div>
-
-                {[
-                  { field: 'specialization', label: 'Specialization *', placeholder: 'e.g. Cardiologist' },
-                  { field: 'qualification', label: 'Qualification *', placeholder: 'e.g. MBBS, MD' },
-                  { field: 'experience', label: 'Experience (years) *', placeholder: '5', type: 'number' },
-                  { field: 'registrationNumber', label: 'Registration No. *', placeholder: 'MCI123456' },
-                  { field: 'consultationFee', label: 'Consultation Fee (₹) *', placeholder: '500', type: 'number' },
-                ].map(f => (
-                  <div key={f.field}>
-                    <label className="mq-label">{f.label}</label>
-                    <input
-                      className="mq-input"
-                      type={f.type || 'text'}
-                      placeholder={f.placeholder}
-                      value={form[f.field]}
-                      onChange={updateForm(f.field)}
-                      required
-                    />
-                  </div>
-                ))}
-
-                {/* Working hours */}
-                <div>
-                  <label className="mq-label">Start Time</label>
-                  <input
-                    className="mq-input" type="time"
-                    value={form.workingHours.start}
-                    onChange={e => setForm(f => ({ ...f, workingHours: { ...f.workingHours, start: e.target.value } }))}
-                  />
-                </div>
-                <div>
-                  <label className="mq-label">End Time</label>
-                  <input
-                    className="mq-input" type="time"
-                    value={form.workingHours.end}
-                    onChange={e => setForm(f => ({ ...f, workingHours: { ...f.workingHours, end: e.target.value } }))}
-                  />
                 </div>
               </div>
 
@@ -217,7 +174,7 @@ const ManageDoctors = () => {
                         {u.name?.startsWith('Dr') ? u.name : `Dr. ${u.name}`}
                       </h3>
                       <p style={{ fontSize: 12, color: 'var(--brand-accent)', margin: 0, fontWeight: 500 }}>
-                        {doctor.specialization}
+                        {doctor.specialization || 'Profile Pending'}
                       </p>
                     </div>
                     <div style={{
@@ -229,9 +186,9 @@ const ManageDoctors = () => {
 
                   <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 14 }}>
                     {[
-                      `${doctor.experience} yrs`,
-                      `₹${doctor.consultationFee}`,
-                      `${doctor.workingHours?.start}–${doctor.workingHours?.end}`,
+                      `${doctor.experience || 0} yrs`,
+                      `₹${doctor.consultationFee || 0}`,
+                      doctor.workingHours?.start ? `${doctor.workingHours.start}–${doctor.workingHours.end}` : '09:00–17:00',
                     ].map(tag => (
                       <span key={tag} style={{
                         fontSize: 11, padding: '3px 9px', borderRadius: 99,

@@ -3,7 +3,7 @@
 // Clean card selection UI
 
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 // Role cards ka data
 const roles = [
@@ -49,6 +49,22 @@ const roles = [
 const RoleSelect = () => {
   const navigate = useNavigate()
   const [selected, setSelected] = useState(null)
+
+  useEffect(() => {
+    // Clear stale auth session when landing on RoleSelect to prevent session conflicts
+    localStorage.removeItem('medqueue_token')
+    localStorage.removeItem('medqueue_user')
+
+    // Silent wake-up call to backend Render server (resolves cold starts)
+    const wakeUp = async () => {
+      try {
+        const url = import.meta.env.VITE_API_URL || 'https://medqueue-hospital-opd-system-8.onrender.com/api'
+        const healthUrl = url.endsWith('/api') ? url.slice(0, -4) + '/health' : url + '/health'
+        fetch(healthUrl).catch(() => {})
+      } catch (err) {}
+    }
+    wakeUp()
+  }, [])
 
   const handleContinue = () => {
     if (!selected) return

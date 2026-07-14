@@ -31,6 +31,18 @@ const Login = () => {
   }, [role, navigate])
 
   useEffect(() => {
+    // Silent wake-up call to backend Render server (resolves cold starts)
+    const wakeUp = async () => {
+      try {
+        const url = import.meta.env.VITE_API_URL || 'https://medqueue-hospital-opd-system-8.onrender.com/api'
+        const healthUrl = url.endsWith('/api') ? url.slice(0, -4) + '/health' : url + '/health'
+        fetch(healthUrl).catch(() => {})
+      } catch (err) {}
+    }
+    wakeUp()
+  }, [])
+
+  useEffect(() => {
     if (error) {
       toast.error(error)
       clearError()

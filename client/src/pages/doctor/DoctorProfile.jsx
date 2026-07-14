@@ -15,6 +15,10 @@ const DoctorProfile = () => {
     consultationFee: '',
     workingHours: { start: '09:00', end: '17:00' },
     availableDays: [1, 2, 3, 4, 5],
+    specialization: '',
+    qualification: '',
+    experience: '',
+    registrationNumber: '',
   })
   const [isLoading, setIsLoading] = useState(false)
 
@@ -28,6 +32,10 @@ const DoctorProfile = () => {
         consultationFee: doctorProfile.consultationFee || '',
         workingHours: doctorProfile.workingHours || { start: '09:00', end: '17:00' },
         availableDays: doctorProfile.availableDays || [1, 2, 3, 4, 5],
+        specialization: doctorProfile.specialization || '',
+        qualification: doctorProfile.qualification || '',
+        experience: doctorProfile.experience !== undefined ? doctorProfile.experience : '',
+        registrationNumber: doctorProfile.registrationNumber || '',
       })
     }
   }, [doctorProfile])
@@ -45,8 +53,8 @@ const DoctorProfile = () => {
 
   const handleSave = async (e) => {
     e.preventDefault()
-    if (!form.consultationFee || form.availableDays.length === 0) {
-      toast.error('Please fill all required fields')
+    if (form.availableDays.length === 0) {
+      toast.error('Please select at least one available day')
       return
     }
     setIsLoading(true)
@@ -55,6 +63,10 @@ const DoctorProfile = () => {
         consultationFee: Number(form.consultationFee),
         workingHours: form.workingHours,
         availableDays: form.availableDays,
+        specialization: form.specialization,
+        qualification: form.qualification,
+        experience: Number(form.experience),
+        registrationNumber: form.registrationNumber,
       })
       await fetchDoctorProfile()
       toast.success('Profile updated successfully!', 'Saved')

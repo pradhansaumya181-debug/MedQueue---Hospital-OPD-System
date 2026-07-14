@@ -7,18 +7,28 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import useAuth from '@/hooks/useAuth'
 import useToast from '@/hooks/useToast'
 import useThemeStore from '@/store/themeStore'
+import ConfirmModal from '@/components/common/ConfirmModal'
+import useAuthStore from '@/store/authStore'
 
 const Navbar = ({ onMenuClick }) => {
   const { user, logout, isPatient, isDoctor, isAdmin } = useAuth()
   const navigate = useNavigate()
   const toast = useToast()
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false)
   const { isDark, toggleTheme } = useThemeStore()
 
 
   const handleLogout = async () => {
     await logout()
     toast.info('Logged out successfully')
+  }
+
+  const handleConfirmLogoLogout = async () => {
+    setLogoutConfirmOpen(false)
+    await useAuthStore.getState().logout()
+    toast.info('Logged out successfully')
+    navigate('/')
   }
 
   const roleConfig = {
@@ -73,7 +83,7 @@ const Navbar = ({ onMenuClick }) => {
         {/* Logo */}
         <div
           style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}
-          onClick={() => navigate('/')}
+          onClick={() => setLogoutConfirmOpen(true)}
         >
           <div style={{
             width: 34, height: 34,
@@ -234,6 +244,17 @@ const Navbar = ({ onMenuClick }) => {
           .menu-btn { display: flex !important; }
         }
       `}</style>
+
+      <ConfirmModal
+        isOpen={logoutConfirmOpen}
+        onCancel={() => setLogoutConfirmOpen(false)}
+        onConfirm={handleConfirmLogoLogout}
+        title="Sign Out?"
+        message="Are you sure you want to return to the home page? This will log you out of your current session."
+        confirmLabel="Yes, Sign out"
+        cancelLabel="Stay logged in"
+        type="warning"
+      />
     </header>
   )
 }
