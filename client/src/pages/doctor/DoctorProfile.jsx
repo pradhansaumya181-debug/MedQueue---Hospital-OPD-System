@@ -144,6 +144,55 @@ const DoctorProfile = () => {
 
           <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
 
+            {/* Specialization & Qualification */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+              <div>
+                <label className="mq-label">Specialization</label>
+                <input
+                  className="mq-input"
+                  type="text"
+                  placeholder="e.g. Cardiologist"
+                  value={form.specialization}
+                  onChange={(e) => setForm((f) => ({ ...f, specialization: e.target.value }))}
+                />
+              </div>
+              <div>
+                <label className="mq-label">Qualification</label>
+                <input
+                  className="mq-input"
+                  type="text"
+                  placeholder="e.g. MBBS, MD"
+                  value={form.qualification}
+                  onChange={(e) => setForm((f) => ({ ...f, qualification: e.target.value }))}
+                />
+              </div>
+            </div>
+
+            {/* Experience & Registration */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+              <div>
+                <label className="mq-label">Experience (Years)</label>
+                <input
+                  className="mq-input"
+                  type="number"
+                  placeholder="e.g. 5"
+                  min="0"
+                  value={form.experience}
+                  onChange={(e) => setForm((f) => ({ ...f, experience: e.target.value }))}
+                />
+              </div>
+              <div>
+                <label className="mq-label">Registration No.</label>
+                <input
+                  className="mq-input"
+                  type="text"
+                  placeholder="e.g. REG123456"
+                  value={form.registrationNumber}
+                  onChange={(e) => setForm((f) => ({ ...f, registrationNumber: e.target.value }))}
+                />
+              </div>
+            </div>
+
             {/* Consultation fee */}
             <div>
               <label className="mq-label">Consultation Fee (₹) *</label>

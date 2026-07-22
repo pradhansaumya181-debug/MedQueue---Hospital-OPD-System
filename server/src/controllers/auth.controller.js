@@ -8,6 +8,7 @@
 // GET  /api/auth/me        — Current logged in user ki info
 
 const User = require('../models/User');
+const Doctor = require('../models/Doctor');
 const { hashPassword, comparePassword } = require('../utils/hashPassword');
 const { generateAccessToken } = require('../utils/generateToken');
 const { sendSuccess, sendError } = require('../utils/apiResponse');
@@ -57,6 +58,14 @@ const registerStaff = async (req, res, next) => {
       password: hashedPassword,  // Hashed version save ho raha hai
       role,
     });
+
+    if (role === ROLES.DOCTOR) {
+      const admin = await User.findOne({ role: ROLES.ADMIN });
+      await Doctor.create({
+        userId: user._id,
+        hospitalId: admin ? admin._id : user._id,
+      });
+    }
 
     // JWT token banao — role claims ke saath
     const token = generateAccessToken({

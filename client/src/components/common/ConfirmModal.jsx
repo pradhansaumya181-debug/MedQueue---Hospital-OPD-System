@@ -76,7 +76,7 @@ const ConfirmModal = ({
           background: 'var(--surface)',
           borderRadius: 'var(--radius-xl)',
           padding: '32px 28px',
-          width: '100%',
+          width: 'calc(100% - 32px)',
           maxWidth: '380px',
           zIndex: 1001,
           boxShadow: '0 24px 64px rgba(0,0,0,0.2)',

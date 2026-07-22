@@ -97,7 +97,7 @@ const Navbar = ({ onMenuClick }) => {
               <rect x="1" y="6" width="16" height="6" rx="2" fill="var(--brand-accent)"/>
             </svg>
           </div>
-          <span style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-primary)' }}>
+          <span className="hide-on-mobile" style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-primary)' }}>
             MedQueue
           </span>
         </div>
@@ -145,7 +145,7 @@ const Navbar = ({ onMenuClick }) => {
   )}
 </button>
         {/* Role badge */}
-        <span style={{
+        <span className="hide-on-mobile" style={{
           fontSize: 12, fontWeight: 500,
           color: rc.color, background: rc.bg,
           padding: '3px 10px', borderRadius: 99,
@@ -180,7 +180,7 @@ const Navbar = ({ onMenuClick }) => {
                 : initials
               }
             </div>
-            <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-primary)', maxWidth: 100, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            <span className="hide-on-mobile" style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-primary)', maxWidth: 100, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {user?.name?.split(' ')[0] || 'User'}
             </span>
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ color: 'var(--text-muted)', transform: dropdownOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}>
@@ -242,6 +242,10 @@ const Navbar = ({ onMenuClick }) => {
       <style>{`
         @media (max-width: 768px) {
           .menu-btn { display: flex !important; }
+          .hide-on-mobile { display: none !important; }
+        }
+        @media (max-width: 480px) {
+          header { padding: 0 12px !important; }
         }
       `}</style>
 
