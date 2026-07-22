@@ -17,6 +17,9 @@ const ProtectedRoute = ({ children }) => {
 
   // Nahi hai to login par bhejo
   // state mein current path save karo — login ke baad wapas aayenge
+  if (location.pathname.startsWith('/admin')) {
+    return <Navigate to="/admin" state={{ from: location }} replace />
+  }
   return <Navigate to="/login" state={{ from: location }} replace />
 }
 

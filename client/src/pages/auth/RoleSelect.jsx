@@ -32,18 +32,6 @@ const roles = [
       </svg>
     ),
   },
-  {
-    id: 'admin',
-    label: 'Hospital Admin',
-    subtitle: 'Oversee operations & manage staff',
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-        <rect x="4" y="4" width="20" height="20" rx="3" stroke="currentColor" strokeWidth="2" />
-        <path d="M4 10h20" stroke="currentColor" strokeWidth="2" />
-        <path d="M10 16h8M10 20h5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      </svg>
-    ),
-  },
 ]
 
 const RoleSelect = () => {
